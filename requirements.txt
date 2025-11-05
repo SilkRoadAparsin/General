@@ -1,1 +1,9 @@
-cuml-cu12 --extra-index-url=https://pypi.nvidia.com
+bertopic
+datasets
+accelerate
+bitsandbytes
+xformers
+adjustText
+openai
+python-dotenv
+datamapplot

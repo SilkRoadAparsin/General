@@ -1,48 +1,44 @@
 import sys
 import os
+import re
 
 import openai
 from bertopic.representation import OpenAI
 from bertopic import BERTopic
 from sentence_transformers import SentenceTransformer
-# from cuml.manifold import UMAP
-# from cuml.cluster import HDBSCAN
+from umap import UMAP
+from hdbscan import HDBSCAN
+
+import datamapplot
+import matplotlib.pyplot as plt
+
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import config
+from dataset.western_iranian_southwestern.persian.persian_Iranian_iran.snappfood import download_snappfood_dataset
 
 
 client = openai.OpenAI(api_key=config.OPENAI_API_KEY)
 representation_model = OpenAI(client, model="gpt-4o-mini", chat=True)
 topic_model = BERTopic(representation_model=representation_model)
-embedding_model = SentenceTransformer("BAAI/bge-small-en")
-# umap_model = UMAP(n_neighbors=15, n_components=5, min_dist=0.0, metric='cosine', random_state=42)
-# hdbscan_model = HDBSCAN(min_cluster_size=400, metric='euclidean', cluster_selection_method='eom', prediction_data=True)
+embedding_model = SentenceTransformer("BAAI/bge-m3")
+umap_model = UMAP(n_neighbors=15, n_components=5, min_dist=0.0, metric='cosine', random_state=42)
+hdbscan_model = HDBSCAN(min_cluster_size=100, metric='euclidean', cluster_selection_method='eom', prediction_data=True)
 
-docs = [
-    "I love programming in Python. It's such a versatile language!",
-    "The weather today is sunny and warm, perfect for a walk in the park.",
-    "Artificial Intelligence is transforming the world in incredible ways.",
-    "I enjoy cooking new recipes and experimenting with flavors.",
-    "Traveling to new countries broadens my perspective and enriches my life.",
-    "The future of technology is both exciting and uncertain.",
-    "Reading books allows me to explore different worlds and ideas.",
-    "Music has the power to evoke deep emotions and memories.",
-    "Fitness and health are essential for a balanced lifestyle.",
-    "Learning new languages opens up opportunities for communication and understanding.",
-    "Traveling enhances creativity and inspires new ideas.",
-]
+data = download_snappfood_dataset()
+docs = list(data['test']['comment'])
 
 embeddings = embedding_model.encode(docs, show_progress_bar=True)
+reduced_embeddings = UMAP(n_neighbors=15, n_components=2, min_dist=0.0, metric='cosine', random_state=42).fit_transform(embeddings)
 
 
 topic_model = BERTopic(
 
   # Sub-models
   embedding_model=embedding_model,
-#   umap_model=umap_model,
-#   hdbscan_model=hdbscan_model,
+  umap_model=umap_model,
+  hdbscan_model=hdbscan_model,
   representation_model=representation_model,
 
   # Hyperparameters
@@ -52,3 +48,32 @@ topic_model = BERTopic(
 
 # Train model
 topics, probs = topic_model.fit_transform(docs, embeddings)
+
+
+
+# Create a label for each document
+llm_labels = [re.sub(r'\W+', ' ', label[0][0].split("\n")[0].replace('"', '')) for label in topic_model.get_topics(full=True)["Main"].values()]
+llm_labels = [label if label else "Unlabelled" for label in llm_labels]
+all_labels = [llm_labels[topic+topic_model._outliers] if topic != -1 else "Unlabelled" for topic in topics]
+
+# Run the visualization
+image = datamapplot.create_plot(
+    reduced_embeddings,
+    all_labels,
+    label_font_size=11,
+    title="SnappFood Topic Modeling",
+    sub_title="Topics labeled with GPT-4o-Mini, BGE-M3 embeddings, UMAP & HDBSCAN",
+    label_wrap_width=20,
+    use_medoids=True,
+    # logo=bertopic_logo,
+    logo_width=0.16,
+)
+
+
+output_path = "bertopic_datamapplot.png"
+
+# image may be (Figure, Axes) or just a Figure
+fig = image[0] if isinstance(image, (tuple, list)) else image
+fig.savefig(output_path, dpi=300, bbox_inches="tight")
+plt.close(fig)
+print(f"Saved plot to {output_path}")
