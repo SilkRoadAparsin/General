@@ -43,7 +43,8 @@ topic_model = BERTopic(
 
     # Hyperparameters
     top_n_words=10,
-    verbose=True
+    verbose=True,
+    nr_topics=20,
 )
 
 # Train model

@@ -43,13 +43,12 @@ topic_model = BERTopic(
 
     # Hyperparameters
     top_n_words=10,
-    verbose=True
+    verbose=True,
+    nr_topics=20,
 )
 
 # Train model
 topics, probs = topic_model.fit_transform(docs, embeddings)
-
-
 
 # Create a label for each document
 llm_labels = [re.sub(r'\W+', ' ', label[0][0].split("\n")[0].replace('"', '')) for label in topic_model.get_topics(full=True)["Main"].values()]
