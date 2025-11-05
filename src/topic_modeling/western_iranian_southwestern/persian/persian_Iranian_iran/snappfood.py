@@ -17,6 +17,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../.
 
 import config
 from dataset.western_iranian_southwestern.persian.persian_Iranian_iran.snappfood import download_snappfood_dataset
+from topic_modeling.utils import translate_text
 
 
 client = openai.OpenAI(api_key=config.OPENAI_API_KEY)
@@ -24,7 +25,7 @@ representation_model = OpenAI(client, model="gpt-4o-mini", chat=True)
 topic_model = BERTopic(representation_model=representation_model)
 embedding_model = SentenceTransformer("BAAI/bge-m3")
 umap_model = UMAP(n_neighbors=15, n_components=5, min_dist=0.0, metric='cosine', random_state=42)
-hdbscan_model = HDBSCAN(min_cluster_size=100, metric='euclidean', cluster_selection_method='eom', prediction_data=True)
+hdbscan_model = HDBSCAN(min_cluster_size=20, metric='euclidean', cluster_selection_method='eom', prediction_data=True)
 
 data = download_snappfood_dataset()
 docs = list(data['text'])
@@ -34,16 +35,15 @@ reduced_embeddings = UMAP(n_neighbors=15, n_components=2, min_dist=0.0, metric='
 
 
 topic_model = BERTopic(
+    # Sub-models
+    embedding_model=embedding_model,
+    umap_model=umap_model,
+    hdbscan_model=hdbscan_model,
+    representation_model=representation_model,
 
-  # Sub-models
-  embedding_model=embedding_model,
-  umap_model=umap_model,
-  hdbscan_model=hdbscan_model,
-  representation_model=representation_model,
-
-  # Hyperparameters
-  top_n_words=10,
-  verbose=True
+    # Hyperparameters
+    top_n_words=10,
+    verbose=True
 )
 
 # Train model
@@ -53,8 +53,10 @@ topics, probs = topic_model.fit_transform(docs, embeddings)
 
 # Create a label for each document
 llm_labels = [re.sub(r'\W+', ' ', label[0][0].split("\n")[0].replace('"', '')) for label in topic_model.get_topics(full=True)["Main"].values()]
-llm_labels = [label if label else "Unlabelled" for label in llm_labels]
-all_labels = [llm_labels[topic+topic_model._outliers] if topic != -1 else "Unlabelled" for topic in topics]
+print(llm_labels)
+translated_labels = [translate_text(label, target_language="English") for label in llm_labels if label]
+print(translated_labels)
+all_labels = [translated_labels[topic+topic_model._outliers] if topic != -1 else "Unlabelled" for topic in topics]
 
 # Run the visualization
 image = datamapplot.create_plot(
@@ -65,7 +67,6 @@ image = datamapplot.create_plot(
     sub_title="Topics labeled with GPT-4o-Mini, BGE-M3 embeddings, UMAP & HDBSCAN",
     label_wrap_width=20,
     use_medoids=True,
-    # logo=bertopic_logo,
     logo_width=0.16,
 )
 
