@@ -4,6 +4,7 @@ import os
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+RESULT_DIR = os.getenv("RESULT_DIR", "results")
 
 LANGUAGES = {
     "Eastern Iranian - Northeastern": {
