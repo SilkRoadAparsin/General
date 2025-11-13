@@ -25,14 +25,14 @@ keyword_extraction_prompt = "چند عبارت مناسب برای جستجو د
 search_result_path = f'{config.DATA_DIR}/google_search.jsonl'
 data_path = f'{config.DATA_DIR}/extracted_samples.csv'
 
-# print("Extracting keywords ...")
-# keywords = extract_keywords(client, keyword_extraction_prompt, language, dialect, accent, target_language)
-# print("Extracted Keywords:", keywords)
+print("Extracting keywords ...")
+keywords = extract_keywords(client, keyword_extraction_prompt, language, dialect, accent, target_language)
+print("Extracted Keywords:", keywords)
 
-# print("Searching Google for each keyword ...")
-# for keyword in keywords:
-#     print(f"Searching Google for keyword: {keyword} ...")
-#     search_google(keyword, search_result_path, config.SERPAPI_API_KEY)
+print("Searching Google for each keyword ...")
+for keyword in keywords:
+    print(f"Searching Google for keyword: {keyword} ...")
+    search_google(keyword, search_result_path, config.SERPAPI_API_KEY)
 
 print("Parsing search results and extracting samples ...")
 links = []
