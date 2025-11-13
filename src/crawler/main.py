@@ -67,8 +67,8 @@ for link in tqdm(links):
         
         if samples == []:
             samples = [{"original": "NO SAMPLE", "translation": "NO SAMPLE"}]
-            samples = automatic_validation(samples, doc.page_content)
-            samples_df = pd.DataFrame(samples)
-            samples_df['source'] = link
-            translation_data = pd.concat([translation_data, samples_df], ignore_index=True)
+        samples = automatic_validation(samples, doc.page_content)
+        samples_df = pd.DataFrame(samples)
+        samples_df['source'] = link
+        translation_data = pd.concat([translation_data, samples_df], ignore_index=True)
     translation_data.to_csv(data_path, index=False)
