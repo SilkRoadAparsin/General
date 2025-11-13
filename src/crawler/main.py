@@ -3,6 +3,7 @@ import sys
 import json
 
 import pandas as pd
+from tqdm import tqdm
 from langchain_community.document_loaders import WebBaseLoader
 from openai import OpenAI
 
@@ -24,14 +25,14 @@ keyword_extraction_prompt = "چند عبارت مناسب برای جستجو د
 search_result_path = f'{config.DATA_DIR}/google_search.jsonl'
 data_path = f'{config.DATA_DIR}/extracted_samples.csv'
 
-print("Extracting keywords ...")
-keywords = extract_keywords(client, keyword_extraction_prompt, language, dialect, accent, target_language)
-print("Extracted Keywords:", keywords)
+# print("Extracting keywords ...")
+# keywords = extract_keywords(client, keyword_extraction_prompt, language, dialect, accent, target_language)
+# print("Extracted Keywords:", keywords)
 
-print("Searching Google for each keyword ...")
-for keyword in keywords:
-    print(f"Searching Google for keyword: {keyword} ...")
-    search_google(keyword, search_result_path, config.SERPAPI_API_KEY)
+# print("Searching Google for each keyword ...")
+# for keyword in keywords:
+#     print(f"Searching Google for keyword: {keyword} ...")
+#     search_google(keyword, search_result_path, config.SERPAPI_API_KEY)
 
 print("Parsing search results and extracting samples ...")
 links = []
@@ -46,27 +47,28 @@ with open(search_result_path, 'r', encoding='utf-8') as f:
 if os.path.exists(data_path):
     translation_data = pd.read_csv(data_path)
 else:
-    translation_data = pd.DataFrame(columns=["original", "translation", "original_check", "translation_check", "source"])
+    translation_data = pd.DataFrame(columns=["original", "translation", "original_check", "translation_check", "source", "human_original_check", "human_translation_check"])
 
-for link in links:
+for link in tqdm(links):
     if link in translation_data['source'].values:
         print(f"Skipping already processed link: {link}")
         continue
     print(f"Processing link: {link} ...")
-    if link:
-        markdown_doc = WebBaseLoader(link).load()
-        for doc in markdown_doc:
-            samples = extract_samples(
-                client,
-                doc.page_content,
-                language=language,
-                dialect=dialect,
-                accent=accent,
-                target_language=target_language
-            )
-            
+    markdown_doc = WebBaseLoader(link).load()
+    for doc in markdown_doc:
+        samples = extract_samples(
+            client,
+            doc.page_content,
+            language=language,
+            dialect=dialect,
+            accent=accent,
+            target_language=target_language
+        )
+        
+        if samples == []:
+            samples = [{"original": "NO SAMPLE", "translation": "NO SAMPLE"}]
             samples = automatic_validation(samples, doc.page_content)
             samples_df = pd.DataFrame(samples)
             samples_df['source'] = link
             translation_data = pd.concat([translation_data, samples_df], ignore_index=True)
-            translation_data.to_csv(data_path, index=False)
+    translation_data.to_csv(data_path, index=False)
