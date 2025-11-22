@@ -93,7 +93,10 @@ def extract_samples(client: OpenAI, content: str, language: str, dialect: str, a
 def automatic_validation(samples: list[dict[str, str]], source_context: str) -> list[dict[str, str]]:
     for sample in samples:
         original_check = sample['original'] in source_context
-        translation_check = sample['translation'] in source_context
+        if sample['translation']:
+            translation_check = sample['translation'] in source_context
+        else:
+            translation_check = True
         sample['original_check'] = original_check
         sample['translation_check'] = translation_check
     return samples
