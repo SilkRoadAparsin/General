@@ -6,6 +6,7 @@ import pandas as pd
 from tqdm import tqdm
 from langchain_community.document_loaders import WebBaseLoader
 from openai import OpenAI
+import requests
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import config
@@ -109,7 +110,11 @@ for selected_language in languages_info.keys():
             print(f"Skipping already processed link: {link}")
             continue
         print(f"Processing link: {link} ...")
-        markdown_doc = WebBaseLoader(link).load()
+        try:
+            markdown_doc = WebBaseLoader(link).load()
+        except Exception as e:
+            print(f"Failed to load link: {link} due to {e}")
+            continue
         for doc in markdown_doc:
             # Check if document is too large and chunk if necessary
             if doc.metadata.get('token_count') is None:
