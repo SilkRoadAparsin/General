@@ -20,48 +20,63 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 client = OpenAI(api_key=config.OPENAI_API_KEY)
 
 languages_info = {
-    "Yazdi": {
-        "language": "فارسی",
-        "dialect": "یزدی",
-        "accent": "یزدی",
+    # "Yazdi": {
+    #     "language": "فارسی",
+    #     "dialect": "یزدی",
+    #     "accent": "یزدی",
+    #     "target_language": "فارسی معیار",
+    #     "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش یزدی ارائه دهید.  ",
+    # },
+    # "Semnani": {
+    #     "language": "فارسی",
+    #     "dialect": "سمنانی",
+    #     "accent": "سمنانی",
+    #     "target_language": "فارسی معیار",
+    #     "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش سمنانی ارائه دهید.  ",
+    # },
+    # "Zorastrian": {
+    #     "language": "فارسی",
+    #     "dialect": "زرتشتی",
+    #     "accent": "زرتشتی",
+    #     "target_language": "فارسی معیار",
+    #     "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش زرتشتی ارائه دهید.  ",
+    # },
+    # "Dezfuli": {
+    #     "language": "فارسی",
+    #     "dialect": "دزفولی",
+    #     "accent": "دزفولی",
+    #     "target_language": "فارسی معیار",
+    #     "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش دزفولی ارائه دهید.  ",
+    # },
+    # "Shirazi": {
+    #     "language": "فارسی",
+    #     "dialect": "شیرازی",
+    #     "accent": "شیرازی",
+    #     "target_language": "فارسی معیار",
+    #     "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش شیرازی ارائه دهید.  ",
+    # },
+    # "Kaboli": {
+    #     "language": "دری",
+    #     "dialect": "دری",
+    #     "accent": "کابلی",
+    #     "target_language": "دری معیار",
+    #     "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش دری کابلی ارائه دهید.  ",
+    # },
+    "Lori": {
+        "language": "لری",
+        "dialect": "بختیاری",
+        "accent": "چهارمحالی",
         "target_language": "فارسی معیار",
-        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش یزدی ارائه دهید.  ",
+        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش لری بختیاری ارائه دهید.  ",
     },
-    "Semnani": {
+    "Khorasani": {
         "language": "فارسی",
-        "dialect": "سمنانی",
-        "accent": "سمنانی",
+        "dialect": "خراسانی",
+        "accent": "خراسانی",
         "target_language": "فارسی معیار",
-        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش سمنانی ارائه دهید.  ",
+        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش خراسانی ارائه دهید.  ",
     },
-    "Zorastrian": {
-        "language": "فارسی",
-        "dialect": "زرتشتی",
-        "accent": "زرتشتی",
-        "target_language": "فارسی معیار",
-        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش زرتشتی ارائه دهید.  ",
-    },
-    "Dezfuli": {
-        "language": "فارسی",
-        "dialect": "دزفولی",
-        "accent": "دزفولی",
-        "target_language": "فارسی معیار",
-        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش دزفولی ارائه دهید.  ",
-    },
-    "Shirazi": {
-        "language": "فارسی",
-        "dialect": "شیرازی",
-        "accent": "شیرازی",
-        "target_language": "فارسی معیار",
-        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش شیرازی ارائه دهید.  ",
-    },
-    "Kaboli": {
-        "language": "دری",
-        "dialect": "دری",
-        "accent": "کابلی",
-        "target_language": "دری معیار",
-        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش دری کابلی ارائه دهید.  ",
-    },
+
 }
 
 for selected_language in languages_info.keys():

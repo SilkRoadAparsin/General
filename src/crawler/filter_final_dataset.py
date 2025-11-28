@@ -13,8 +13,10 @@ language_list = [
     "Semnani",
     "Zorastrian",
     "Dezfuli",
-    # "Shirazi",
-    # "Kaboli",
+    "Shirazi",
+    "Kaboli",
+    "Lori",
+    "Khorasani",
 ]
 
 def filter_final_dataset(input_file: str, output_file: str, min_word_count: int = 50):
