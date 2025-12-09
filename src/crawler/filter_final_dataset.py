@@ -17,6 +17,8 @@ language_list = [
     "Kaboli",
     "Lori",
     "Khorasani",
+    "Pashto",
+    "Hazaragi",
 ]
 
 def filter_final_dataset(input_file: str, output_file: str, min_word_count: int = 50):
@@ -39,5 +41,5 @@ def filter_final_dataset(input_file: str, output_file: str, min_word_count: int 
 if __name__ == "__main__":
     for language in language_list:
         input_file = f"{config.DATA_DIR}/{language}_extracted_samples.csv"
-        output_file = f"{config.DATA_DIR}/final/{language}_final_dataset_filtered.csv"
+        output_file = f"{config.DATA_DIR}/data_gathering/{language}_final_dataset_filtered.csv"
         filter_final_dataset(input_file, output_file, min_word_count=3)

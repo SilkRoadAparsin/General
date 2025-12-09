@@ -20,48 +20,48 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 client = OpenAI(api_key=config.OPENAI_API_KEY)
 
 languages_info = {
-    # "Yazdi": {
-    #     "language": "فارسی",
-    #     "dialect": "یزدی",
-    #     "accent": "یزدی",
-    #     "target_language": "فارسی معیار",
-    #     "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش یزدی ارائه دهید.  ",
-    # },
-    # "Semnani": {
-    #     "language": "فارسی",
-    #     "dialect": "سمنانی",
-    #     "accent": "سمنانی",
-    #     "target_language": "فارسی معیار",
-    #     "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش سمنانی ارائه دهید.  ",
-    # },
-    # "Zorastrian": {
-    #     "language": "فارسی",
-    #     "dialect": "زرتشتی",
-    #     "accent": "زرتشتی",
-    #     "target_language": "فارسی معیار",
-    #     "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش زرتشتی ارائه دهید.  ",
-    # },
-    # "Dezfuli": {
-    #     "language": "فارسی",
-    #     "dialect": "دزفولی",
-    #     "accent": "دزفولی",
-    #     "target_language": "فارسی معیار",
-    #     "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش دزفولی ارائه دهید.  ",
-    # },
-    # "Shirazi": {
-    #     "language": "فارسی",
-    #     "dialect": "شیرازی",
-    #     "accent": "شیرازی",
-    #     "target_language": "فارسی معیار",
-    #     "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش شیرازی ارائه دهید.  ",
-    # },
-    # "Kaboli": {
-    #     "language": "دری",
-    #     "dialect": "دری",
-    #     "accent": "کابلی",
-    #     "target_language": "دری معیار",
-    #     "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش دری کابلی ارائه دهید.  ",
-    # },
+    "Yazdi": {
+        "language": "فارسی",
+        "dialect": "یزدی",
+        "accent": "یزدی",
+        "target_language": "فارسی معیار",
+        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش یزدی ارائه دهید.  ",
+    },
+    "Semnani": {
+        "language": "فارسی",
+        "dialect": "سمنانی",
+        "accent": "سمنانی",
+        "target_language": "فارسی معیار",
+        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش سمنانی ارائه دهید.  ",
+    },
+    "Zorastrian": {
+        "language": "فارسی",
+        "dialect": "زرتشتی",
+        "accent": "زرتشتی",
+        "target_language": "فارسی معیار",
+        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش زرتشتی ارائه دهید.  ",
+    },
+    "Dezfuli": {
+        "language": "فارسی",
+        "dialect": "دزفولی",
+        "accent": "دزفولی",
+        "target_language": "فارسی معیار",
+        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش دزفولی ارائه دهید.  ",
+    },
+    "Shirazi": {
+        "language": "فارسی",
+        "dialect": "شیرازی",
+        "accent": "شیرازی",
+        "target_language": "فارسی معیار",
+        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش شیرازی ارائه دهید.  ",
+    },
+    "Kaboli": {
+        "language": "دری",
+        "dialect": "دری",
+        "accent": "کابلی",
+        "target_language": "دری معیار",
+        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش دری کابلی ارائه دهید.  ",
+    },
     "Lori": {
         "language": "لری",
         "dialect": "بختیاری",
@@ -76,7 +76,21 @@ languages_info = {
         "target_language": "فارسی معیار",
         "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش خراسانی ارائه دهید.  ",
     },
+    "Pashto": {
+        "language": "پشتو",
+        "dialect": "پشتو", 
+        "accent": "عمومی",  
+        "target_language": "فارسی معیار",
+        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن متن‌ها، داستان‌ها یا نمونه‌های اصیل زبان پشتو ارائه دهید.",
+    },
 
+    "Hazaragi": {
+        "language": "دری",    
+        "dialect": "هزارگی",
+        "accent": "هزارگی",
+        "target_language": "دری معیار",
+        "keyword_extraction_prompt": "چند عبارت مناسب برای جستجو در گوگل برای یافتن نمونه‌های لهجه یا گویش دری هزارگی ارائه دهید.",
+    },
 }
 
 for selected_language in languages_info.keys():
