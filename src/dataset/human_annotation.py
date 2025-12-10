@@ -2,6 +2,24 @@ import pandas as pd
 import os
 
 languages_info = {
+    "Isfahani": {
+        "language": "Persian",
+        "dialect": "Persian, Iranian",
+        "accent": "Isfahani",
+        "target_language": "Standard Persian",
+    },
+    "Southern_Kurdish": {
+        "language": "Kurdish",
+        "dialect": "Southern Kurdish",
+        "accent": "Southern Kurdish",
+        "target_language": "Standard Persian",
+    },
+    "Tonekaboni": {
+        "language": "Caspian",
+        "dialect": "Mazandarani",
+        "accent": "Tonekaboni",
+        "target_language": "Standard Persian",
+    },
     "Yazdi": {
         "language": "Persian",
         "dialect": "Persian, Iranian",
@@ -14,7 +32,7 @@ languages_info = {
         "accent": "Semnani",
         "target_language": "Standard Persian",
     },
-    "Zorastrian": {
+    "Zoroastrian": {
         "language": "Persian",
         "dialect": "Dari, Zoroastrian",
         "accent": "Yazdi",
