@@ -19,7 +19,7 @@ def get_label(row) -> str:
         return row["AnnotatorOne"]
     else:
         return "Neutral"
-    
+
 
 def download_pashto_english_bilingual_sentiment_corpus_dataset(cache_dir: str):
     file_path = f'{cache_dir}/PashtoCorpusUpdated.csv'
@@ -43,6 +43,6 @@ def download_pashto_english_bilingual_sentiment_corpus_dataset(cache_dir: str):
     return pd.DataFrame(data)
 
 if __name__ == "__main__":
-    file_dir = "/home/sadegh/SilkRoadLang/Sentiment/data/topic_modeling/"
+    file_dir = "data/topic_modeling/"
     df = download_pashto_english_bilingual_sentiment_corpus_dataset(file_dir)
     print(df.head())

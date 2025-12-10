@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
 import config
-from dataset.western_iranian_southwestern.persian.persian_iranian_iran.snappfood import download_snappfood_dataset
+from dataset.western_iranian_southwestern.persian.snappfood import download_snappfood_dataset
 from topic_modeling.utils import translate_text
 
 
