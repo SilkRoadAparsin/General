@@ -21,7 +21,7 @@ def get_label(row) -> str:
         return "Neutral"
 
 
-def download_pashto_english_bilingual_sentiment_corpus_dataset(cache_dir: str):
+def download_pashto_english_bilingual_sentiment_corpus_dataset(cache_dir: str = "data/topic_modeling/") -> pd.DataFrame:
     file_path = f'{cache_dir}/PashtoCorpusUpdated.csv'
     api.dataset_download_files('farhadkhan66/pashto-translated-corpus', path=cache_dir, unzip=True)
 
