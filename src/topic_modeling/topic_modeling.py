@@ -101,7 +101,7 @@ image = datamapplot.create_plot(
     reduced_embeddings,
     all_labels,
     label_font_size=11,
-    title="SnappFood Topic Modeling",
+    title="Topic Modeling of Iranic Languages",
     sub_title="Topics labeled with GPT-4o-Mini, BGE-M3 embeddings, UMAP & HDBSCAN",
     label_wrap_width=20,
     use_medoids=True,
